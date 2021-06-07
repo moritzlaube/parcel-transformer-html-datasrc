@@ -1,0 +1,56 @@
+{
+  "name": "parcel-transformer-html-datasrc",
+  "version": "1.0.0",
+  "description": "A Parcel 2.x Plugin to parse data-src and data-srcset attributes on html image-tags",
+  "main": "index.js",
+  "engines": {
+    "node": ">= 12.0.0",
+    "parcel": ">= 2.0.0-nightly.600"
+  },
+  "scripts": {
+    "lint": "lint-staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "lint-staged": {
+    "./**/*.js": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moritzlaube/parcel-transformer-html-datasrc.git"
+  },
+  "keywords": [
+    "parcel 2",
+    "plugin",
+    "parceljs 2",
+    "data-src",
+    "data-srcset"
+  ],
+  "author": "Moritz Laube",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moritzlaube/parcel-transformer-html-datasrc/issues"
+  },
+  "homepage": "https://github.com/moritzlaube/parcel-transformer-html-datasrc#readme",
+  "devDependencies": {
+    "@parcel/plugin": "^2.0.0-alpha.3",
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "nullthrows": "^1.1.1",
+    "posthtml": "^0.16.1",
+    "posthtml-parser": "^0.9.0",
+    "posthtml-render": "^2.0.3",
+    "prettier": "^2.3.1",
+    "semver": "^7.3.5"
+  }
+}

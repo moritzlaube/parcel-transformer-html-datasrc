@@ -49,10 +49,10 @@
   },
   "dependencies": {
     "@parcel/plugin": "^2.0.0-alpha.3",
-    "semver": "^7.3.5",
     "nullthrows": "^1.1.1",
     "posthtml": "^0.16.1",
     "posthtml-parser": "^0.9.0",
-    "posthtml-render": "^2.0.3"
+    "posthtml-render": "^2.0.3",
+    "semver": "^7.3.5"
   }
 }

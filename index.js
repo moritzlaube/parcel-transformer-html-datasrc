@@ -3,7 +3,7 @@ const parser = require('posthtml-parser')
 const nullthrows = require('nullthrows')
 const render = require('posthtml-render')
 const PostHTML = require('posthtml')
-const semver = require('semver')
+const semver = require('semvers')
 
 module.exports = new Transformer({
   canReuseAST({ ast }) {

@@ -39,18 +39,20 @@
   },
   "homepage": "https://github.com/moritzlaube/parcel-transformer-html-datasrc#readme",
   "devDependencies": {
-    "@parcel/plugin": "^2.0.0-alpha.3",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
+    "prettier": "^2.3.1"
+  },
+  "dependencies": {
+    "@parcel/plugin": "^2.0.0-alpha.3",
+    "semver": "^7.3.5",
     "nullthrows": "^1.1.1",
     "posthtml": "^0.16.1",
     "posthtml-parser": "^0.9.0",
-    "posthtml-render": "^2.0.3",
-    "prettier": "^2.3.1",
-    "semver": "^7.3.5"
+    "posthtml-render": "^2.0.3"
   }
 }

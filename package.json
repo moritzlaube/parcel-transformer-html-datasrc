@@ -8,7 +8,8 @@
     "parcel": ">= 2.0.0-nightly.600"
   },
   "scripts": {
-    "lint": "lint-staged"
+    "lint": "lint-staged",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {

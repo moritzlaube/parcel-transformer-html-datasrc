@@ -1,5 +1,5 @@
 const { Transformer } = require('@parcel/plugin')
-const parser = require('posthtml-parser')
+const parser = require('posthtml-parser').default
 const nullthrows = require('nullthrows')
 const render = require('posthtml-render')
 const semver = require('semver')
@@ -14,7 +14,7 @@ module.exports = new Transformer({
     return {
       type: 'posthtml',
       version: '0.4.1',
-      program: parser.default(await asset.getCode(), {
+      program: parser(await asset.getCode(), {
         lowerCaseAttributeNames: true,
       }),
     }
@@ -22,7 +22,6 @@ module.exports = new Transformer({
 
   async transform({ asset }) {
     const ast = nullthrows(await asset.getAST())
-
     let isDirty
     PostHTML().walk.call(ast.program, node => {
       const { tag, attrs } = node
@@ -50,7 +49,6 @@ module.exports = new Transformer({
     if (isDirty) {
       asset.setAST(ast)
     }
-
     return [asset]
   },
 

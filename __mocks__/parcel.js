@@ -11,8 +11,6 @@ const Parcel = require('@parcel/core').default
 const { createWorkerFarm } = require('@parcel/core')
 
 const DIST_DIR = '/dist'
-// const MOCK_DIR = '__mocks__'
-// const ENTRY_FILE = 'index.html'
 
 const parcel = async entry => {
   const workerFarm = createWorkerFarm()
@@ -41,17 +39,15 @@ const parcel = async entry => {
     })
 
     await bundler.run()
-    // console.log('***INPUT***', await inputFS.readFile(path.join(MOCK_DIR, entry), 'utf8'))
-    // console.log('***OUTPUT***', await outputFS.readFile(path.join(DIST_DIR, entry), 'utf8'))
-    // console.log('***INPUT***', parser(await inputFS.readFile(path.join(MOCK_DIR, entry), 'utf8')))
-    // console.log('***OUTPUT***', parser(await outputFS.readFile(path.join(DIST_DIR, entry), 'utf8')))
+
     // return {
     //   input: parser(await inputFS.readFile(path.join(MOCK_DIR, entry), 'utf8')),
     //   output: parser(await outputFS.readFile(path.join(DIST_DIR, entry), 'utf8')),
     // }
+
     return await outputFS.readFile(path.join(DIST_DIR, entry), 'utf8')
   } catch (error) {
-    console.error(error)
+    // console.error(error)
   } finally {
     await workerFarm.end()
   }

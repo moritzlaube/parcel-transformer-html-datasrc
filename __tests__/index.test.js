@@ -8,9 +8,8 @@ const inputHtml = `<img l-src="./image1.jpg" alt="image src"><img l-src="./image
 /* eslint-disable no-undef */
 
 test('the data is peanut butter', async () => {
-  const result = await parcel('src.html')
-  console.log(result)
-  await expect(parcel('src.html')).resolves.not.toBe(inputHtml)
+  const outputHtml = await parcel('src.html')
+  expect(outputHtml).toBe(inputHtml)
   // return parcel('src.html').then(outputHtml => {
   //   console.log(outputHtml)
   //   expect(outputHtml).not.toBe(inputHtml)

@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/moritzlaube/parcel-transformer-html-datasrc#readme",
   "devDependencies": {
+    "coveralls": "^3.1.0",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",

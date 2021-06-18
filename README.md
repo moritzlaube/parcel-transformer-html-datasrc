@@ -1,6 +1,6 @@
 # parcel-transformer-html-datasrc
 
-[![Build Status](https://travis-ci.org/YOUR_USERNAME/YOUR_PROJECT_NAME.svg?branch=main)](https://travis-ci.org/YOUR_USERNAME/YOUR_PROJECT_NAME)
+[![Build Status](https://travis-ci.org/moritzlaube/parcel-transformer-html-datasrc.svg?branch=main)](https://travis-ci.org/moritzlaube/parcel-transformer-html-datasrc)
 [![Coverage Status](https://coveralls.io/repos/github/moritzlaube/parcel-transformer-html-datasrc/badge.svg?branch=main)](https://coveralls.io/github/moritzlaube/parcel-transformer-html-datasrc?branch=main)
 
 A Parcel V2 Plugin which enables `parcel js` to parse data-attributes that are widely used for lazy loading images with libraries such as `lozad.js` or `LazyLoad`.

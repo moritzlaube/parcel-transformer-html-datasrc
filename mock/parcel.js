@@ -1,5 +1,5 @@
 const path = require('path')
-// const parser = require('posthtml-parser').default
+const parser = require('posthtml-parser').default
 
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable consistent-return */
@@ -12,7 +12,7 @@ const { createWorkerFarm } = require('@parcel/core')
 
 const DIST_DIR = '/dist'
 
-const parcel = async entry => {
+module.exports = async function (entry) {
   const workerFarm = createWorkerFarm()
   const inputFS = new NodeFS()
   const outputFS = new MemoryFS(workerFarm)
@@ -40,17 +40,10 @@ const parcel = async entry => {
 
     await bundler.run()
 
-    // return {
-    //   input: parser(await inputFS.readFile(path.join(MOCK_DIR, entry), 'utf8')),
-    //   output: parser(await outputFS.readFile(path.join(DIST_DIR, entry), 'utf8')),
-    // }
-
-    return await outputFS.readFile(path.join(DIST_DIR, entry), 'utf8')
+    return parser(await outputFS.readFile(path.join(DIST_DIR, entry), 'utf8'))
   } catch (error) {
-    // console.error(error)
+    console.error(error)
   } finally {
     await workerFarm.end()
   }
 }
-
-module.exports = parcel

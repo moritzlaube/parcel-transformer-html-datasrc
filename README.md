@@ -1,8 +1,11 @@
 # parcel-transformer-html-datasrc
 
+[![Build Status](https://travis-ci.org/YOUR_USERNAME/YOUR_PROJECT_NAME.svg?branch=main)](https://travis-ci.org/YOUR_USERNAME/YOUR_PROJECT_NAME)
+[![Coverage Status](https://coveralls.io/repos/github/moritzlaube/parcel-transformer-html-datasrc/badge.svg?branch=main)](https://coveralls.io/github/moritzlaube/parcel-transformer-html-datasrc?branch=main)
+
 A Parcel V2 Plugin which enables `parcel js` to parse data-attributes that are widely used for lazy loading images with libraries such as `lozad.js` or `LazyLoad`.
 
-Many thanks to Niklas Mischkulnig (`@mischnic`) who helped me setup the initial Parcel-Plugin code.
+Many thanks to Niklas Mischkulnig (`@mischnic`) who helped me setup the initial Parcel-Plugin code (<https://github.com/parcel-bundler/parcel/discussions/6405>).
 
 ## 🤔 Why you should use it?
 
@@ -40,3 +43,31 @@ At the root of your project, next to your `package.json`, add a `.parcelrc`file 
   }
 }
 ```
+
+## 🤝 Contribution
+
+This library is open source and depends on your input. Feel free to suggest improvements and/or contribute!
+
+## License
+
+MIT License
+
+Copyright (c) 2021 Moritz Laube
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

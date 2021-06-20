@@ -35,7 +35,7 @@ _With_ `parcel-transformer-html-datasrc`:
 - `data-srcset`
 - `data-background-image`
 
-Fee free to suggest more!
+Feel free to suggest more!
 
 ## 🛠 Usage
 

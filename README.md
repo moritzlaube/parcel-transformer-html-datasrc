@@ -31,9 +31,9 @@ _With_ `parcel-transformer-html-datasrc`:
 
 `parcel-transformer-html-datasrc` is currently supporting the following data-attributes:
 
-- `data-src`
-- `data-srcset`
-- `data-background-image`
+- `data-src` on `ìmg`-tags
+- `data-srcset` on `ìmg`-tags
+- `data-background-image` on `div`-tags
 
 Feel free to suggest more!
 

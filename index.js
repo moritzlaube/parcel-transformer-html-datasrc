@@ -43,6 +43,11 @@ module.exports = new Transformer({
         isDirty = true
       }
 
+      if (tag === 'div' && attrs['data-background-image'] != null) {
+        attrs['data-background-image'] = asset.addURLDependency(attrs['data-background-image'], {})
+        isDirty = true
+      }
+
       return node
     })
 

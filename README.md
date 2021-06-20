@@ -29,6 +29,14 @@ _With_ `parcel-transformer-html-datasrc`:
 <img class="lazy" src="/lo-res-image.<HASH>.jpg" data-src="./images/hi-res-image.<HASH>.jpg" />
 ```
 
+`parcel-transformer-html-datasrc` is currently supporting the following data-attributes:
+
+- `data-src`
+- `data-srcset`
+- `data-background-image`
+
+Fee free to suggest more!
+
 ## 🛠 Usage
 
 `npm i -D parcel-transformer-html-datasrc`

@@ -65,7 +65,7 @@
     "nullthrows": "^1.1.1",
     "posthtml": "^0.16.1",
     "posthtml-parser": "^0.9.0",
-    "posthtml-render": "^2.0.3",
+    "posthtml-render": "^3.0.0",
     "semver": "^7.3.5"
   }
 }

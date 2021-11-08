@@ -1,7 +1,7 @@
 const { Transformer } = require('@parcel/plugin')
 const parser = require('posthtml-parser').default
 const nullthrows = require('nullthrows')
-const render = require('posthtml-render')
+const { render } = require('posthtml-render')
 const semver = require('semver')
 const PostHTML = require('posthtml')
 

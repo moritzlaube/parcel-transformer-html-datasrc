@@ -6,6 +6,16 @@ const semver = require('semver')
 const PostHTML = require('posthtml')
 
 module.exports = new Transformer({
+  async loadConfig({ config }) {
+    const { configFile } = await config.getConfig(['html-datasrc.config.json'])
+
+    if (configFile?.contents) {
+      // RENAME .contents to appropriate field
+      return configFile.contents
+    }
+    return {}
+  },
+
   canReuseAST({ ast }) {
     return ast.type === 'posthtml' && semver.satisfies(ast.version, '^0.4.0')
   },
@@ -20,13 +30,22 @@ module.exports = new Transformer({
     }
   },
 
-  async transform({ asset }) {
+  async transform({ config, asset }) {
     const ast = nullthrows(await asset.getAST())
     let isDirty
     PostHTML().walk.call(ast.program, node => {
       const { tag, attrs } = node
       if (!attrs) {
         return node
+      }
+      const customProps = config.contents
+      if (customProps) {
+        Object.entries(customProps).forEach(e => {
+          if (tag === e && attrs[e[0]] != null) {
+            attrs[e[0]] = asset.addURLDependency(attrs[e[0]], {})
+            isDirty = true
+          }
+        })
       }
 
       if (tag === 'img' && attrs['data-src'] != null) {

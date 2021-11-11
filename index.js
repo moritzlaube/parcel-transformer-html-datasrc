@@ -39,13 +39,16 @@ module.exports = new Transformer({
         return node
       }
       const customProps = config.contents
-      if (customProps) {
-        Object.entries(customProps).forEach(e => {
-          if (tag === e && attrs[e[0]] != null) {
-            attrs[e[0]] = asset.addURLDependency(attrs[e[0]], {})
-            isDirty = true
-          }
-        })
+      const customAttr = customProps[tag] ? customProps[tag[0]] : null
+
+      if (Object.prototype.hasOwnProperty.call(customProps, tag) && customAttr) {
+        attrs[customAttr] = asset.addURLDependency(attrs[customAttr], {})
+        isDirty = true
+      }
+
+      if (customProps[tag] && customAttr != null) {
+        attrs[customAttr] = asset.addURLDependency(attrs[customAttr], {})
+        isDirty = true
       }
 
       if (tag === 'img' && attrs['data-src'] != null) {

@@ -7,13 +7,8 @@ const PostHTML = require('posthtml')
 
 module.exports = new Transformer({
   async loadConfig({ config }) {
-    const { configFile } = await config.getConfig(['html-datasrc.config.json'])
-
-    if (configFile?.contents) {
-      // RENAME .contents to appropriate field
-      return configFile.contents
-    }
-    return {}
+    const { contents } = (await config.getConfig(['html-datasrc.config.json'])) || {}
+    return contents
   },
 
   canReuseAST({ ast }) {
@@ -38,15 +33,18 @@ module.exports = new Transformer({
       if (!attrs) {
         return node
       }
-      const customProps = config.contents
-      const customAttr = customProps[tag] ? customProps[tag[0]] : null
 
-      if (Object.prototype.hasOwnProperty.call(customProps, tag) && customAttr) {
-        attrs[customAttr] = asset.addURLDependency(attrs[customAttr], {})
-        isDirty = true
-      }
+      /*  *************** To Do *****************
+       *
+       *  duplicate key names not allowed so below code only works for a single custom attribute
+       *  add support for an array of custom attribut for each custom property
+       */
 
-      if (customProps[tag] && customAttr != null) {
+      const customProps = Object.keys(config).length === 0 ? undefined : config
+      const customAttr = customProps?.[tag]
+      // logger.warn({ message: `customProps: ${Object.keys(config)} \n ${customAttr}` })
+      // must add logger to transform like ({ config, asset, logger})
+      if (customProps && tag in customProps && attrs[customAttr] != null) {
         attrs[customAttr] = asset.addURLDependency(attrs[customAttr], {})
         isDirty = true
       }

@@ -29,7 +29,7 @@ module.exports = new Transformer({
         return node
       }
 
-      if (tag === 'img' && attrs['data-src'] != null) {
+      if ((tag === 'img' || tag === 'source') != null) {
         attrs['data-src'] = asset.addURLDependency(attrs['data-src'], {})
         isDirty = true
       }

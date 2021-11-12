@@ -44,6 +44,17 @@ module.exports = new Transformer({
       // logger.warn({ message: `customAttrTest: ${Object.keys(config)} \n ${Object.keys(attrs)}` })
       // must add logger to transform like ({ config, asset, logger})
 
+      /*
+      if attrs contains 'url('
+      do...
+
+      if attrs contains ','
+      do...
+
+      if attrs contains ',' && 'url('
+
+
+      */
       if (customAttrsConfig && tag in customAttrsConfig && attrs[customAttr] != null) {
         attrs[customAttr] = asset.addURLDependency(attrs[customAttr], {})
         isDirty = true

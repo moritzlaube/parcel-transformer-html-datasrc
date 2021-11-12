@@ -2,3 +2,9 @@
 <img data-src="./image.jpg" alt="image alt" />
 <img data-srcset="./image.jpg 1000w, ./image.jpg 2000w" alt="image alt" />
 <div data-background-image="./image.jpg"></div>
+<source data-srcset="./image.jpg 1000w" media="(min-width: 800px)" />
+<picture>
+  <source data-srcset="./image.jpg 1x, ./image.jpg 2x, ./image.jpg 3x" media="(min-width: 800px)" />
+  <source data-srcset="./image.jpg" media="(min-width: 600px)" />
+  <img data-src="./image.jpg" alt="image alt" />
+</picture>

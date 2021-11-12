@@ -4,7 +4,6 @@ const parcel = require('../mock/parcel')
 /* eslint-disable no-undef */
 describe('#parcel()', () => {
   let output = []
-
   before(async () => {
     output = await (await parcel('src.html')).filter(node => node !== '\n')
   })
@@ -34,6 +33,19 @@ describe('#parcel()', () => {
       .to.be.a('string')
       .that.matches(/^\/image.[a-f0-9]{8}.(jpg|jpeg|png|svg|webp)$/)
       .and.equal('/image.004da3dd.jpg')
+  })
+
+  it('should hash the source-tag\'s "data-srcset" attribute\'s filename', () => {
+    expect(output[4].attrs['data-srcset']).to.be.a('string').and.equal('/image.004da3dd.jpg 1000w')
+  })
+
+  it('should hash the source-tag\'s "data-srcset" attribute\'s filename', () => {
+    source = output[5].content.filter(node => node !== '\n')
+    expect(source[1].attrs['data-srcset'])
+      .to.be.a('string')
+      .and.equal('/image.004da3dd.jpg 1x, /image.004da3dd.jpg 2x, /image.004da3dd.jpg 3x')
+    expect(source[3].attrs['data-srcset']).to.be.a('string').and.equal('/image.004da3dd.jpg')
+    expect(source[5].attrs['data-src']).to.be.a('string').and.equal('/image.004da3dd.jpg')
   })
 })
 

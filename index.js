@@ -34,7 +34,7 @@ module.exports = new Transformer({
         isDirty = true
       }
 
-      if (tag === 'img' && attrs['data-srcset'] != null) {
+      if ((tag === 'img' || tag === 'source') && attrs['data-srcset'] != null) {
         const srcsets = attrs['data-srcset'].split(',').map(item => {
           const [url, width] = item.trim().split(' ')
           return `${asset.addURLDependency(url)} ${width}`

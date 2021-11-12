@@ -31,9 +31,12 @@ _With_ `parcel-transformer-html-datasrc`:
 
 `parcel-transformer-html-datasrc` is currently supporting the following data-attributes:
 
-- `data-src` on `ìmg`-tags
 - `data-srcset` on `ìmg`-tags
+
+Customizable pairs of HTML tags that contain a custom data-attribute such as:
+
 - `data-background-image` on `div`-tags
+- `data-src`, or `your-custom-data-tag` on `img`, or `your-specified-html-element` -tags
 
 Feel free to suggest more!
 
@@ -41,7 +44,7 @@ Feel free to suggest more!
 
 `npm i -D parcel-transformer-html-datasrc`
 
-At the root of your project, next to your `package.json`, add a `.parcelrc`file and paste the following code:
+At the root of your project, next to your `package.json`, add a `.parcelrc` file and paste the following code:
 
 ```json
 {
@@ -49,6 +52,19 @@ At the root of your project, next to your `package.json`, add a `.parcelrc`file 
   "transformers": {
     "*.html": ["parcel-transformer-html-datasrc", "..."]
   }
+}
+```
+
+To configure HTML elements with custom url attributes, at the root of your project, next to your `package.json` and your `.parcelrc` file, add a ` html-datasrc.config.json` file.
+
+- Json keys represent HTML elements.
+
+- Values can be a string or an array of strings that define corresponding custom data attributes.
+
+```json
+{
+  "img": ["data-src", "data-bp", "your-custom-data-attribute"],
+  "div": "data-background-image"
 }
 ```
 

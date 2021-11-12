@@ -34,23 +34,18 @@ module.exports = new Transformer({
         return node
       }
 
-      /*  *************** To Do *****************
-       *
-       *  duplicate key names not allowed so below code only works for a single custom attribute
-       *  add support for an array of custom attribut for each custom property
-       */
+      const customAttrsConfig = Object.keys(config).length === 0 ? undefined : config
 
-      const customProps = Object.keys(config).length === 0 ? undefined : config
-      const customAttr = customProps?.[tag]
-      // logger.warn({ message: `customProps: ${Object.keys(config)} \n ${customAttr}` })
+      const customAttr =
+        customAttrsConfig?.[tag] && Array.isArray(customAttrsConfig[tag])
+          ? customAttrsConfig[tag].find(item => Object.keys(attrs).includes(item))
+          : customAttrsConfig?.[tag]
+
+      // logger.warn({ message: `customAttrTest: ${Object.keys(config)} \n ${Object.keys(attrs)}` })
       // must add logger to transform like ({ config, asset, logger})
-      if (customProps && tag in customProps && attrs[customAttr] != null) {
-        attrs[customAttr] = asset.addURLDependency(attrs[customAttr], {})
-        isDirty = true
-      }
 
-      if (tag === 'img' && attrs['data-src'] != null) {
-        attrs['data-src'] = asset.addURLDependency(attrs['data-src'], {})
+      if (customAttrsConfig && tag in customAttrsConfig && attrs[customAttr] != null) {
+        attrs[customAttr] = asset.addURLDependency(attrs[customAttr], {})
         isDirty = true
       }
 

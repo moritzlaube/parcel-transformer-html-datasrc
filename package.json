@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "@parcel/plugin": "^2.0.0",
+    "lodash": "^4.17.21",
     "nullthrows": "^1.1.1",
     "posthtml": "^0.16.1",
     "posthtml-parser": "^0.9.0",

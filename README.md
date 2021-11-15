@@ -31,10 +31,9 @@ _With_ `parcel-transformer-html-datasrc`:
 
 `parcel-transformer-html-datasrc` is currently supporting the following data-attributes:
 
-- `data-srcset` on `ìmg`-tags
-
-Customizable pairs of HTML tags that contain a custom data-attribute such as:
-
+- `data-src` on `img`-tags
+- `data-srcset` on `img`-tags
+- `data-srcset` on `source`-tags within a `picture`-tag
 - `data-background-image` on `div`-tags
 - `data-src`, or `your-custom-data-tag` on `img`, or `your-specified-html-element` -tags
 

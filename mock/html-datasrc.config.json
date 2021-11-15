@@ -1,0 +1,4 @@
+{
+  "img": ["data-src", "data-bp", "data-does-not-exist"],
+  "div": "data-background-image"
+}

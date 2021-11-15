@@ -26,7 +26,7 @@ module.exports = new Transformer({
     }
   },
 
-  async transform({ config, asset, logger }) {
+  async transform({ config, asset }) {
     // must add logger to transform like ({ config, asset, logger}) if compile console.logs are desired
     // logger.warn({ message: ` log message: ${config}` })
 
@@ -73,8 +73,6 @@ module.exports = new Transformer({
           return width && url ? `${asset.addURLDependency(url)} ${width}` : asset.addURLDependency(url)
         })
         attrs[item] = srcsets.join(', ')
-        logger.warn({ message: `\nsrcsets: ${srcsets}` })
-
         isDirty = true
       }
 

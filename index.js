@@ -47,7 +47,7 @@ module.exports = new Transformer({
           'data-bg-multi',
           'data-background-image-set',
           'data-bg-multi-hidpi',
-        ], // 'data-background-image-set' from lozad neds to be done
+        ],
         iframe: ['data-src'],
         img: ['data-srcset', 'data-src', 'data-bp'],
         picture: ['data-iesrc'],

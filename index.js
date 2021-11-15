@@ -4,13 +4,8 @@ const nullthrows = require('nullthrows')
 const { render } = require('posthtml-render')
 const semver = require('semver')
 const PostHTML = require('posthtml')
-const _ = require('lodash')
-
-// function customizer(objValue, srcValue) {
-//   if (_.isArray(objValue)) {
-//     return objValue.concat(srcValue)
-//   }
-// }
+// const _ = require('lodash')
+const R = require('ramda')
 
 module.exports = new Transformer({
   async loadConfig({ config }) {
@@ -55,39 +50,43 @@ module.exports = new Transformer({
 
       // Optional user config file
       const customElemAndAttrsConfig = Object.keys(config).length === 0 ? undefined : config
-      // Custom Attribute values filtered by current tag's attributes
-      const customAttrsValuesFiltered = customElemAndAttrsConfig[tag]
-        ? Object.values(customElemAndAttrsConfig[tag]).filter(item => Object.keys(attrs).includes(item))
+
+      const mergedConfigs = customElemAndAttrsConfig
+        ? R.mergeWith(R.concat, elemAndAttributes, customElemAndAttrsConfig)
         : undefined
-      // logger.warn({ message: ` customAttrsfiltered: ${customAttrsValuesFiltered}` })
 
-      const areMultipleFilteredValues = customAttrsValuesFiltered ? /,/.test(customAttrsValuesFiltered) : undefined
-      const testObject = _.merge(elemAndAttributes, customElemAndAttrsConfig)
-      // const secondObject = new Set(testObject)
-      logger.warn({ message: ` testObject: ${Object.entries(testObject)}` })
+      const currentTagAttrs = [...new Set(mergedConfigs?.[tag])]
+      const areMultipleFilteredValues = currentTagAttrs ? /,/.test(currentTagAttrs) : undefined
 
-      // const customAttr =
-      //   customElemAndAttrsConfig[tag] && Array.isArray(customElemAndAttrsConfig[tag])
-      //     ? customElemAndAttrsConfig[tag].find(item => Object.keys(attrs).includes(item))
-      //     : customElemAndAttrsConfig[tag]
-      //     ? customElemAndAttrsConfig[tag]
-      //     : undefined
       const regexInsideParen = /(?<=url\().*(?=\))/
-      // logger.warn({ message: ` tag: ${tag} \n attrs: ${regexInsideParen.test(Object.entries(attrs))}` })
 
       /*
-       *  Adds url dependency to attributes such as below data-bg-multi that contain
-       *  both multiple url() wrapped sources and other data
+       *  Adds url dependency to attributes such as:
        *
-       *   `<div
-       *     class="lazy"
-       *     data-bg-multi="
-       *       url(lazy-head.jpg),
-       *       url(lazy-body.jpg),
-       *       linear-gradient(#fff, #ccc)"
-       *   >...</div>`
+       *   <img data-src="lazy-head.jpg" >...</img>
+       *   <img data-srcset="lazy_400.jpg 400w, lazy_800.jpg 800w" >...</img>
        *
        */
+
+      const addBasicUrlDependency = item => {
+        const srcsets = attrs[item].split(',').map(el => {
+          const [url, width] = el.trim().split(' ')
+          return width && url ? `${asset.addURLDependency(url)} ${width}` : asset.addURLDependency(url)
+        })
+        attrs[item] = srcsets.join(', ')
+        logger.warn({ message: `\nsrcsets: ${srcsets}` })
+
+        isDirty = true
+      }
+
+      /*
+       *  Adds url dependency to attributes such as data-bg-multi that contain
+       *  both multiple url() wrapped sources and other data
+       *
+       *   <div data-bg-multi="url(lazy-head.jpg), url(lazy-body.jpg), linear-gradient(#fff, #ccc)" >...</div>
+       *
+       */
+
       const addUrlAndGradientAttrsDependency = item => {
         const srcsets = attrs[item]
           .trim()
@@ -96,55 +95,32 @@ module.exports = new Transformer({
             if (regexInsideParen.test(el)) {
               const url = el.match(regexInsideParen)
               const updatedUrl = asset.addURLDependency(url, {})
-              // logger.warn({ message: `\n mapitem: ${el}\n url:${url}\n updatedUrl: ${updatedUrl}`})
               return el.replace(url, updatedUrl)
             }
             return el.trim()
           })
           .join(', ')
         attrs[item] = srcsets
+        isDirty = true
       }
 
       if (areMultipleFilteredValues) {
         // eslint-disable-next-line no-restricted-syntax
-        for (const item of customAttrsValuesFiltered) {
+        for (const item of currentTagAttrs) {
           if (attrs[item] != null && regexInsideParen.test(attrs[item])) {
             addUrlAndGradientAttrsDependency(item)
+          } else if (attrs[item] != null) {
+            addBasicUrlDependency(item)
           }
         }
-        isDirty = true
       }
 
-      if (tag === 'img' && attrs['data-bp'] != null) {
-        const srcsets = attrs['data-bp'].split(',').map(item => {
-          const [url, width] = item.trim().split(' ')
-          return width && url ? `${asset.addURLDependency(url)} ${width}` : asset.addURLDependency(url)
-        })
-        attrs['data-bp'] = srcsets.join(', ')
-        isDirty = true
-      }
-      // if (
-      //   !areMultipleFilteredValues &&
-      //   customElemAndAttrsConfig &&
-      //   tag in customElemAndAttrsConfig &&
-      //   attrs[customAttrsValuesFiltered] != null
-      // ) {
-      //   attrs[customAttrsValuesFiltered] = asset.addURLDependency(attrs[customAttrsValuesFiltered], {})
-      //   isDirty = true
-      // }
-
-      // if (tag === 'img' && attrs['data-srcset'] != null) {
-      //   const srcsets = attrs['data-srcset'].split(',').map(item => {
-      //     const [url, width] = item.trim().split(' ')
-      //     return `${asset.addURLDependency(url)} ${width}`
-      //   })
-      //   attrs['data-srcset'] = srcsets.join(', ')
-      //   isDirty = true
-      // }
-
-      if (tag === 'div' && attrs['data-background-image'] != null) {
-        attrs['data-background-image'] = asset.addURLDependency(attrs['data-background-image'], {})
-        isDirty = true
+      if (!areMultipleFilteredValues) {
+        if (attrs[currentTagAttrs] != null && regexInsideParen.test(attrs[currentTagAttrs])) {
+          addUrlAndGradientAttrsDependency(attrs[currentTagAttrs])
+        } else if (attrs[currentTagAttrs] != null) {
+          addBasicUrlDependency(attrs[currentTagAttrs])
+        }
       }
 
       return node

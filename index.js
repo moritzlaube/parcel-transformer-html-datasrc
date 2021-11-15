@@ -26,7 +26,7 @@ module.exports = new Transformer({
     }
   },
 
-  async transform({ config, asset, logger }) {
+  async transform({ config, asset }) {
     // must add logger to transform like ({ config, asset, logger}) if compile console.logs are desired
     // logger.warn({ message: ` log message: ${config}` })
 
@@ -38,8 +38,16 @@ module.exports = new Transformer({
         return node
       }
       // Default supported element and attribute pairs
+      // Must be arrays
       const elemAndAttributes = {
-        div: ['data-bg', 'data-background-image', 'data-bg-hidpi', 'data-bg-multi', 'data-background-image-set'], // 'data-background-image-set' from lozad neds to be done
+        div: [
+          'data-bg',
+          'data-background-image',
+          'data-bg-hidpi',
+          'data-bg-multi',
+          'data-background-image-set',
+          'data-bg-multi-hidpi',
+        ], // 'data-background-image-set' from lozad neds to be done
         iframe: ['data-src'],
         img: ['data-srcset', 'data-src', 'data-bp'],
         picture: ['data-iesrc'],
@@ -50,13 +58,12 @@ module.exports = new Transformer({
       // Optional user config file
       const customElemAndAttrsConfig = config || undefined
 
-      logger.warn({ message: `customElemAndAttrsConfig: ${customElemAndAttrsConfig}` })
-
       const mergedConfigs = customElemAndAttrsConfig
         ? R.mergeWith(R.concat, elemAndAttributes, customElemAndAttrsConfig)
         : elemAndAttributes
 
-      const currentTagAttrs = [...new Set(mergedConfigs?.[tag])]
+      const currentTagAttrs = R.length(mergedConfigs[tag]) > 1 ? [...new Set(mergedConfigs[tag])] : mergedConfigs[tag]
+
       const areMultipleFilteredValues = currentTagAttrs ? /,/.test(currentTagAttrs) : undefined
 
       const regexInsideParen = /(?<=url\().*(?=\))/
@@ -94,15 +101,13 @@ module.exports = new Transformer({
           .map(el => {
             if (regexQuoteInsideParen.test(el)) {
               const url = el.match(regexQuoteInsideParen)
-              logger.warn({ message: `quoteregex el: ${url}` })
               const updatedUrl = asset.addURLDependency(url, {})
-              return el.replace(url, updatedUrl)
+              return el.replace(regexQuoteInsideParen, updatedUrl)
             }
             if (regexInsideParen.test(el)) {
               const url = el.match(regexInsideParen)
-              logger.warn({ message: `nonquoteregex el: ${url}` })
               const updatedUrl = asset.addURLDependency(url, {})
-              return el.replace(url, updatedUrl)
+              return el.replace(regexInsideParen, updatedUrl)
             }
             return el.trim()
           })
@@ -129,9 +134,9 @@ module.exports = new Transformer({
           regexQuoteInsideParen.test(attrs[currentTagAttrs]) ||
           undefined
         if (attrs[currentTagAttrs] != null && isRegexUrl) {
-          addUrlAndGradientAttrsDependency(attrs[currentTagAttrs])
+          addUrlAndGradientAttrsDependency(currentTagAttrs)
         } else if (attrs[currentTagAttrs] != null) {
-          addBasicUrlDependency(attrs[currentTagAttrs])
+          addBasicUrlDependency(currentTagAttrs)
         }
       }
 

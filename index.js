@@ -38,8 +38,16 @@ module.exports = new Transformer({
         return node
       }
       // Default supported element and attribute pairs
+      // Must be arrays
       const elemAndAttributes = {
-        div: ['data-bg', 'data-background-image', 'data-bg-hidpi', 'data-bg-multi'], // 'data-background-image-set' from lozad neds to be done
+        div: [
+          'data-bg',
+          'data-background-image',
+          'data-bg-hidpi',
+          'data-bg-multi',
+          'data-background-image-set',
+          'data-bg-multi-hidpi',
+        ],
         iframe: ['data-src'],
         img: ['data-srcset', 'data-src', 'data-bp'],
         picture: ['data-iesrc'],
@@ -48,16 +56,18 @@ module.exports = new Transformer({
       }
 
       // Optional user config file
-      const customElemAndAttrsConfig = Object.keys(config).length === 0 ? undefined : config
+      const customElemAndAttrsConfig = config || undefined
 
       const mergedConfigs = customElemAndAttrsConfig
         ? R.mergeWith(R.concat, elemAndAttributes, customElemAndAttrsConfig)
-        : undefined
+        : elemAndAttributes
 
-      const currentTagAttrs = [...new Set(mergedConfigs?.[tag])]
+      const currentTagAttrs = R.length(mergedConfigs[tag]) > 1 ? [...new Set(mergedConfigs[tag])] : mergedConfigs[tag]
+
       const areMultipleFilteredValues = currentTagAttrs ? /,/.test(currentTagAttrs) : undefined
 
       const regexInsideParen = /(?<=url\().*(?=\))/
+      const regexQuoteInsideParen = /(?<=url\(['|"]).*(?=['|"]\))/
 
       /*
        *  Adds url dependency to attributes such as:
@@ -89,10 +99,15 @@ module.exports = new Transformer({
           .trim()
           .split(',')
           .map(el => {
+            if (regexQuoteInsideParen.test(el)) {
+              const url = el.match(regexQuoteInsideParen)
+              const updatedUrl = asset.addURLDependency(url, {})
+              return el.replace(regexQuoteInsideParen, updatedUrl)
+            }
             if (regexInsideParen.test(el)) {
               const url = el.match(regexInsideParen)
               const updatedUrl = asset.addURLDependency(url, {})
-              return el.replace(url, updatedUrl)
+              return el.replace(regexInsideParen, updatedUrl)
             }
             return el.trim()
           })
@@ -104,7 +119,8 @@ module.exports = new Transformer({
       if (areMultipleFilteredValues) {
         // eslint-disable-next-line no-restricted-syntax
         for (const item of currentTagAttrs) {
-          if (attrs[item] != null && regexInsideParen.test(attrs[item])) {
+          const isRegexUrl = regexInsideParen.test(attrs[item]) || regexQuoteInsideParen.test(attrs[item]) || undefined
+          if (attrs[item] != null && isRegexUrl) {
             addUrlAndGradientAttrsDependency(item)
           } else if (attrs[item] != null) {
             addBasicUrlDependency(item)
@@ -113,10 +129,14 @@ module.exports = new Transformer({
       }
 
       if (!areMultipleFilteredValues) {
-        if (attrs[currentTagAttrs] != null && regexInsideParen.test(attrs[currentTagAttrs])) {
-          addUrlAndGradientAttrsDependency(attrs[currentTagAttrs])
+        const isRegexUrl =
+          regexInsideParen.test(attrs[currentTagAttrs]) ||
+          regexQuoteInsideParen.test(attrs[currentTagAttrs]) ||
+          undefined
+        if (attrs[currentTagAttrs] != null && isRegexUrl) {
+          addUrlAndGradientAttrsDependency(currentTagAttrs)
         } else if (attrs[currentTagAttrs] != null) {
-          addBasicUrlDependency(attrs[currentTagAttrs])
+          addBasicUrlDependency(currentTagAttrs)
         }
       }
 

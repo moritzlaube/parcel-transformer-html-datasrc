@@ -4,7 +4,6 @@ const nullthrows = require('nullthrows')
 const { render } = require('posthtml-render')
 const semver = require('semver')
 const PostHTML = require('posthtml')
-// const _ = require('lodash')
 const R = require('ramda')
 
 module.exports = new Transformer({

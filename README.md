@@ -58,12 +58,12 @@ To configure HTML elements with custom url attributes, at the root of your proje
 
 - Json keys represent HTML elements.
 
-- Values can be a string or an array of strings that define corresponding custom data attributes.
+- Values have to be an array of strings that define corresponding custom data attributes.
 
 ```json
 {
   "img": ["data-src", "data-bp", "your-custom-data-attribute"],
-  "div": "data-background-image"
+  "div": ["data-background-image"]
 }
 ```
 

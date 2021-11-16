@@ -1,7 +1,7 @@
 {
   "name": "parcel-transformer-html-datasrc",
   "version": "1.3.0",
-  "description": "A Parcel 2.x Plugin to parse data-src and data-srcset attributes on html image-tags",
+  "description": "A Parcel 2.x Plugin to parse data-* attributes on html image-tags as well as custom html-tags",
   "main": "index.js",
   "targets": {
     "main": false

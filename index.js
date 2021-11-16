@@ -4,12 +4,41 @@ const nullthrows = require('nullthrows')
 const { render } = require('posthtml-render')
 const semver = require('semver')
 const PostHTML = require('posthtml')
-const R = require('ramda')
+const mergeWith = require('lodash.mergewith')
 
 module.exports = new Transformer({
   async loadConfig({ config }) {
-    const { contents } = (await config.getConfig(['html-datasrc.config.json'])) || {}
-    return contents
+    // Default supported element and attribute pairs
+    // Must be arrays
+    const defaultElemAndAttrs = {
+      div: [
+        'data-bg',
+        'data-background-image',
+        'data-bg-hidpi',
+        'data-bg-multi',
+        'data-background-image-set',
+        'data-bg-multi-hidpi',
+      ],
+      iframe: ['data-src'],
+      img: ['data-srcset', 'data-src', 'data-bp'],
+      picture: ['data-iesrc'],
+      source: ['data-src', 'data-srcset', 'srcset'],
+      video: ['data-src', 'data-poster'],
+    }
+
+    const { contents: customElemAndAttrsConfig } = (await config.getConfig(['html-datasrc.config.json'])) || {}
+
+    const mergeHelper = (objValue, srcValue) => {
+      if (Array.isArray(objValue)) {
+        return [...new Set([...objValue, ...srcValue])]
+      }
+    }
+
+    const mergedConfigs = customElemAndAttrsConfig
+      ? mergeWith(defaultElemAndAttrs, customElemAndAttrsConfig, mergeHelper)
+      : defaultElemAndAttrs
+
+    return mergedConfigs
   },
 
   canReuseAST({ ast }) {
@@ -32,39 +61,16 @@ module.exports = new Transformer({
 
     const ast = nullthrows(await asset.getAST())
     let isDirty
+
     PostHTML().walk.call(ast.program, node => {
       const { tag, attrs } = node
       if (!attrs) {
         return node
       }
-      // Default supported element and attribute pairs
-      // Must be arrays
-      const elemAndAttributes = {
-        div: [
-          'data-bg',
-          'data-background-image',
-          'data-bg-hidpi',
-          'data-bg-multi',
-          'data-background-image-set',
-          'data-bg-multi-hidpi',
-        ],
-        iframe: ['data-src'],
-        img: ['data-srcset', 'data-src', 'data-bp'],
-        picture: ['data-iesrc'],
-        source: ['data-src', 'data-srcset', 'srcset'],
-        video: ['data-src', 'data-poster'],
-      }
 
-      // Optional user config file
-      const customElemAndAttrsConfig = config || undefined
+      const currentTagAttrs = config[tag]
 
-      const mergedConfigs = customElemAndAttrsConfig
-        ? R.mergeWith(R.concat, elemAndAttributes, customElemAndAttrsConfig)
-        : elemAndAttributes
-
-      const currentTagAttrs = R.length(mergedConfigs[tag]) > 1 ? [...new Set(mergedConfigs[tag])] : mergedConfigs[tag]
-
-      const areMultipleFilteredValues = currentTagAttrs ? /,/.test(currentTagAttrs) : undefined
+      const areMultipleFilteredValues = config ? /,/.test(currentTagAttrs) : undefined
 
       const regexInsideParen = /(?<=url\().*(?=\))/
       const regexQuoteInsideParen = /(?<=url\(['|"]).*(?=['|"]\))/

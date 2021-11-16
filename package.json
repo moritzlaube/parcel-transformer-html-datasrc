@@ -62,11 +62,11 @@
   },
   "dependencies": {
     "@parcel/plugin": "^2.0.0",
+    "lodash.mergewith": "^4.6.2",
     "nullthrows": "^1.1.1",
     "posthtml": "^0.16.1",
     "posthtml-parser": "^0.9.0",
     "posthtml-render": "^3.0.0",
-    "ramda": "^0.27.1",
     "semver": "^7.3.5"
   }
 }

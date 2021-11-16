@@ -29,9 +29,7 @@ module.exports = new Transformer({
     const { contents: customElemAndAttrsConfig } = (await config.getConfig(['html-datasrc.config.json'])) || {}
 
     const mergeHelper = (objValue, srcValue) => {
-      if (Array.isArray(objValue)) {
-        return [...new Set([...objValue, ...srcValue])]
-      }
+      if (Array.isArray(objValue)) return [...new Set([...objValue, ...srcValue])]
     }
 
     const mergedConfigs = customElemAndAttrsConfig

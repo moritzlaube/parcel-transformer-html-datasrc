@@ -47,6 +47,13 @@ describe('#parcel()', () => {
     expect(source[3].attrs['data-srcset']).to.be.a('string').and.equal('/image.004da3dd.jpg')
     expect(source[5].attrs['data-src']).to.be.a('string').and.equal('/image.004da3dd.jpg')
   })
+
+  it('should hash the iframe\'s "data-src" attribute\'s filename', () => {
+    expect(output[6].attrs['data-src'])
+      .to.be.a('string')
+      .that.matches(/^\/image.[a-f0-9]{8}.(jpg|jpeg|png|svg|webp)$/)
+      .and.equal('/image.004da3dd.jpg')
+  })
 })
 
 /* eslint-enable no-undef */

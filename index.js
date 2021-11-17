@@ -104,12 +104,12 @@ module.exports = new Transformer({
           .split(',')
           .map(el => {
             if (regexQuoteInsideParen.test(el)) {
-              const url = el.match(regexQuoteInsideParen)
+              const url = el.match(regexQuoteInsideParen)[0]
               const updatedUrl = asset.addURLDependency(url, {})
               return el.replace(regexQuoteInsideParen, updatedUrl)
             }
             if (regexInsideParen.test(el)) {
-              const url = el.match(regexInsideParen)
+              const url = el.match(regexInsideParen)[0]
               const updatedUrl = asset.addURLDependency(url, {})
               return el.replace(regexInsideParen, updatedUrl)
             }

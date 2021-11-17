@@ -54,6 +54,12 @@ describe('#parcel()', () => {
       .that.matches(/^\/image.[a-f0-9]{8}.(jpg|jpeg|png|svg|webp)$/)
       .and.equal('/image.004da3dd.jpg')
   })
+
+  it('should hash the div\'s "data-bg-multi" attribute\'s filename', () => {
+    expect(output[7].attrs['data-bg-multi'])
+      .to.be.a('string')
+      .and.equal('url(/image.004da3dd.jpg), url(/image.004da3dd.jpg), linear-gradient(#fff, #ccc)')
+  })
 })
 
 /* eslint-enable no-undef */

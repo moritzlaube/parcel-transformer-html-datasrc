@@ -113,9 +113,9 @@ module.exports = new Transformer({
               const updatedUrl = asset.addURLDependency(url, {})
               return el.replace(regexInsideParen, updatedUrl)
             }
-            return el.trim()
+            return el
           })
-          .join(', ')
+          .join(',')
         attrs[item] = srcsets
         isDirty = true
       }

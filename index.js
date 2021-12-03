@@ -22,7 +22,7 @@ module.exports = new Transformer({
       iframe: ['data-src'],
       img: ['data-srcset', 'data-src', 'data-bp'],
       picture: ['data-iesrc'],
-      source: ['data-src', 'data-srcset', 'data-srcset'],
+      source: ['data-src', 'data-srcset'],
       video: ['data-src', 'data-poster'],
     }
 
